@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import pandas as pd
 import time
+import os
 
 # =============================================================================
 # Spoonacular API Configuration
@@ -478,6 +479,7 @@ else:
             unsafe_allow_html=True
         )
 
+
     # =============================================================================
     # Budget Bites Tab
     # =============================================================================
@@ -488,10 +490,14 @@ else:
         We are a group of culinary wizards (a.k.a. students) on a mission to cook up a revolutionary recipe app and generator, spiced with a pinch of machine learning magic. Our app will serve up recipes based on grocery discounts, helping you whip up delicious dishes while saving dough (both kinds!). 🍞💰
         """)
 
-        # Display Start Up Video
-        video_file = open("video.mp4", "rb")
-        video_bytes = video_file.read()
-        st.video(video_bytes)
+        # Check if the video file exists
+        video_path = "video.mp4"
+        if os.path.exists(video_path):
+            video_file = open(video_path, "rb")
+            video_bytes = video_file.read()
+            st.video(video_bytes)
+        else:
+            st.warning("Sorry, the startup video is currently unavailable. Please check back later.")
 
         # Start Up Explanation
 
@@ -556,7 +562,8 @@ else:
             </div>
             """,
             unsafe_allow_html=True
-            )
+        )
+
 
     # =============================================================================
     # Food Selfie Classifier Tab

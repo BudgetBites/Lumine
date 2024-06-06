@@ -491,13 +491,14 @@ else:
         """)
 
         # Check if the video file exists
-        video_path = "video.mp4"
+        video_path = "Video.mp4"
         if os.path.exists(video_path):
             video_file = open(video_path, "rb")
             video_bytes = video_file.read()
             st.video(video_bytes)
         else:
             st.warning("Sorry, the startup video is currently unavailable. Please check back later.")
+            st.write(f"Expected video file at: {os.path.abspath(video_path)}")
 
         # Start Up Explanation
 

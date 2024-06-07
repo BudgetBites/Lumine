@@ -11,6 +11,21 @@ import os
 # Add FontAwesome CSS for icons
 st.markdown('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">', unsafe_allow_html=True)
 
+# Function to check API key validity and quota
+def check_api_key(api_key):
+    url = 'https://api.spoonacular.com/recipes/complexSearch'
+    params = {'apiKey': api_key}
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        headers = response.headers
+        quota_used = headers.get('x-api-quota-used', 0)
+        quota_remaining = headers.get('x-api-quota-remaining', 150)
+        if int(quota_remaining) == 0:
+            return False, "You have reached your daily quota limit. Please upgrade to premium or try again tomorrow."
+        return True, None
+    else:
+        return False, "The API key is not correct. Please follow the instructions to obtain a valid API key."
+
 # Function to get recipes based on user input
 def get_recipes(params, api_key):
     url = 'https://api.spoonacular.com/recipes/complexSearch'
@@ -92,21 +107,6 @@ def generate_grocery_list(recipes):
 def convert_usd_to_eur(usd):
     conversion_rate = 0.85  # Example conversion rate, should be updated with real-time data
     return usd * conversion_rate
-
-# Function to check API key validity and quota
-def check_api_key(api_key):
-    url = 'https://api.spoonacular.com/recipes/complexSearch'
-    params = {'apiKey': api_key}
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        headers = response.headers
-        quota_used = headers.get('x-api-quota-used', 0)
-        quota_remaining = headers.get('x-api-quota-remaining', 150)
-        if int(quota_remaining) == 0:
-            return False, "You have reached your daily quota limit. Please upgrade to premium or try again tomorrow."
-        return True, None
-    else:
-        return False, "The API key is not correct. Please follow the instructions to obtain a valid API key."
 
 # =============================================================================
 # Streamlit Interface Setup
